@@ -20,6 +20,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="com.bank.entity.User"/>
+        <mapping class="com.bank.entity.Account"/>
 
     </session-factory>
 

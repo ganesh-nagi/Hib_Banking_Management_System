@@ -3,27 +3,37 @@ package com.bank.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    @Column(name = "user_id")
+    private int userId;
+
     @Column( nullable = false , length = 100 )
     private String name;
+
     @Column( nullable = false , unique = true , length = 100 )
     private String email;
+
     @Column( nullable = false , length = 10 )
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "user")
+    private List<Account> accounts = new ArrayList<>();
 
 
     public User(){
 
     }
 
-    public User(int userID, String name, String email, String phoneNumber) {
-        this.userID = userID;
+    public User(int userId, String name, String email, String phoneNumber) {
+        this.userId= userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -36,11 +46,11 @@ public class User
     }
 
     public int getUserID() {
-        return userID;
+        return userId;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserID(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -70,7 +80,7 @@ public class User
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userID +
+                "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber=" + phoneNumber +
