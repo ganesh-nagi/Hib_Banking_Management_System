@@ -4,6 +4,8 @@ package com.bank.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -24,6 +26,9 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "user_id" , nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "account")
+    List<BankTransaction> transactions = new ArrayList<>();
 
     public Account() {}
 

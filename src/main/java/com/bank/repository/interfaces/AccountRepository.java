@@ -8,6 +8,8 @@ public interface AccountRepository {
 
     boolean saveAccount(Account account);
 
+    boolean updateAccount(Account account);
+
     Account findAccountByNumber(int accountNumber);
 
     List<Account> findAllAccounts();

@@ -64,4 +64,22 @@ public class AccountRepositoryImpl implements AccountRepository {
             return null;
         }
     }
+
+    @Override
+    public boolean updateAccount(Account account) {
+         Transaction transaction = null;
+         try(Session session = HibernateUtil.getSessionFactory().openSession()){
+             transaction = session.beginTransaction();
+             session.merge(account);
+             transaction.commit();
+             return true;
+         }
+         catch(Exception e){
+             if(transaction != null){
+                 transaction.rollback();
+             }
+             System.out.println("Error While Updating Account" + e.getMessage());
+             return false;
+         }
+    }
 }
