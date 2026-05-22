@@ -27,9 +27,10 @@ public class BankTransactionController {
             System.out.println("======TRANSACTION MENU======");
             System.out.println("1. Deposit money ");
             System.out.println("2. Withdraw money ");
-            System.out.println("3. view all transactions");
-            System.out.println("4. view transactions by accountNumber");
-            System.out.println("5. Back to main menu");
+            System.out.println("3. Transfer money ");
+            System.out.println("4. view all transactions");
+            System.out.println("5. view transactions by accountNumber");
+            System.out.println("6. Back to main menu");
             System.out.println("Enter your choice : ");
 
             int choice = scanner.nextInt();
@@ -45,12 +46,15 @@ public class BankTransactionController {
                     withdrawMoney();
                     break;
                 case 3:
-                    viewAllTransactions();
+                    transferMoney();
                     break;
                 case 4:
+                    viewAllTransactions();
+                    break;
+                case 5:
                     viewTransactionsByAccountNumber();
                      break;
-                 case 5:
+                 case 6:
                      return;
                  default:
 
@@ -108,5 +112,21 @@ public class BankTransactionController {
         scanner.nextLine();
 
         bankTransactionService.withdraw(accountNumber, amount);
+    }
+
+    public void transferMoney() {
+        System.out.println("Enter sender account number : ");
+        int accountNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter receiver account number : ");
+        int accountNumber2 = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter transfer money : ");
+        BigDecimal amount = scanner.nextBigDecimal();
+        scanner.nextLine();
+
+        bankTransactionService.transfer(accountNumber, accountNumber2, amount);
     }
 }

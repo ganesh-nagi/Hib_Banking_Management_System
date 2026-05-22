@@ -1,16 +1,18 @@
 package com.bank.service.impl;
 
-import com.bank.entity.Account;
 import com.bank.entity.BankTransaction;
 import com.bank.entity.TransactionType;
 import com.bank.repository.interfaces.AccountRepository;
 import com.bank.repository.interfaces.BankTransactionRepository;
 import com.bank.service.interfaces.BankTransactionService;
+//import jakarta.transaction.Transaction;
+//import jakarta.transaction.Transaction;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.LocalTime.now;
 
 public class BankTransactionServiceImpl implements BankTransactionService {
 
@@ -158,4 +160,30 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 
 
     }
+
+    @Override
+    public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) {
+
+        if (fromAccountNumber <= 0 || toAccountNumber <= 0) {
+            System.out.println("Invalid account number.");
+            return ;
+        }
+
+        if (fromAccountNumber == toAccountNumber) {
+            System.out.println("Sender and receiver accounts cannot be same.");
+            return ;
+        }
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            System.out.println("Transfer amount must be greater than zero.");
+            return ;
+        }
+
+        bankTransactionRepository.processTransfer(
+                fromAccountNumber,
+                toAccountNumber,
+                amount
+        );
+    }
+
 }

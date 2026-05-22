@@ -112,4 +112,86 @@ public class BankTransactionRepositoryImpl implements BankTransactionRepository 
             return false;
         }
     }
+
+    @Override
+    public boolean processTransfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) {
+
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            transaction = session.beginTransaction();
+
+            Account fromAccount = session.get(Account.class, fromAccountNumber);
+            Account toAccount = session.get(Account.class, toAccountNumber);
+
+            if (fromAccount == null) {
+                System.out.println("Sender account not found.");
+                transaction.rollback();
+                return false;
+            }
+
+            if (toAccount == null) {
+                System.out.println("Receiver account not found.");
+                transaction.rollback();
+                return false;
+            }
+
+            if (fromAccountNumber == toAccountNumber) {
+                System.out.println("Cannot transfer to the same account.");
+                transaction.rollback();
+                return false;
+            }
+
+            if (fromAccount.getBalance().compareTo(amount) < 0) {
+                System.out.println("Insufficient balance.");
+                System.out.println("Available balance: " + fromAccount.getBalance());
+                transaction.rollback();
+                return false;
+            }
+
+            BigDecimal senderUpdatedBalance = fromAccount.getBalance().subtract(amount);
+            BigDecimal receiverUpdatedBalance = toAccount.getBalance().add(amount);
+
+            fromAccount.setBalance(senderUpdatedBalance);
+            toAccount.setBalance(receiverUpdatedBalance);
+
+            BankTransaction debitTransaction = new BankTransaction(
+                    TransactionType.WITHDRAW,
+                    amount,
+                    LocalDateTime.now(),
+                    fromAccount
+            );
+
+            BankTransaction creditTransaction = new BankTransaction(
+                    TransactionType.DEPOSIT,
+                    amount,
+                    LocalDateTime.now(),
+                    toAccount
+            );
+
+            session.merge(fromAccount);
+            session.merge(toAccount);
+
+            session.persist(debitTransaction);
+            session.persist(creditTransaction);
+
+            transaction.commit();
+
+            System.out.println("Transfer successful.");
+            System.out.println("Sender updated balance: " + senderUpdatedBalance);
+            System.out.println("Receiver updated balance: " + receiverUpdatedBalance);
+
+            return true;
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
+            System.out.println("Transfer failed: " + e.getMessage());
+            return false;
+        }
+    }
 }

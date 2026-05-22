@@ -16,4 +16,6 @@ public interface BankTransactionRepository {
     List<BankTransaction> findTransactionByAccountNumber(int accountNumber);
 
     boolean processAccountTransaction(int accountNumber , BigDecimal amount , TransactionType transactionType);
+
+    boolean processTransfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount );
 }
