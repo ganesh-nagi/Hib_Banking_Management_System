@@ -21,6 +21,7 @@
 
         <mapping class="com.bank.entity.User"/>
         <mapping class="com.bank.entity.Account"/>
+        <mapping class="com.bank.entity.BankTransaction"/>
 
     </session-factory>
 

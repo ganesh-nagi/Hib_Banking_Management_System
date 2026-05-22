@@ -22,7 +22,7 @@ public class AccountController {
         while (true) {
 
             System.out.println("======Account Menu======");
-            System.out.println("1. create Accoun");
+            System.out.println("1. create Account ");
             System.out.println("2. find Account by number");
             System.out.println("3. view all Accounts");
             System.out.println("4. view account by userId");
