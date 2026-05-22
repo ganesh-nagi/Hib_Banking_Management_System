@@ -24,11 +24,12 @@ public class BankTransactionController {
         while (true)
         {
 
-            System.out.println("======TRANSATION MENU======");
+            System.out.println("======TRANSACTION MENU======");
             System.out.println("1. Deposit money ");
-            System.out.println("2. view all transactions");
-            System.out.println("3. view transactions by accountNumber");
-            System.out.println("4. Back to main menu");
+            System.out.println("2. Withdraw money ");
+            System.out.println("3. view all transactions");
+            System.out.println("4. view transactions by accountNumber");
+            System.out.println("5. Back to main menu");
             System.out.println("Enter your choice : ");
 
             int choice = scanner.nextInt();
@@ -41,12 +42,15 @@ public class BankTransactionController {
                     depositMoney();
                     break;
                 case 2:
-                    viewAllTransactions();
+                    withdrawMoney();
                     break;
                 case 3:
+                    viewAllTransactions();
+                    break;
+                case 4:
                     viewTransactionsByAccountNumber();
                      break;
-                 case 4:
+                 case 5:
                      return;
                  default:
 
@@ -92,5 +96,17 @@ public class BankTransactionController {
         for (BankTransaction transaction : transactions) {
             System.out.println(transaction);
         }
+    }
+
+    public void withdrawMoney() {
+        System.out.println("Enter account number : ");
+        int accountNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter withdraw amount : ");
+        BigDecimal amount = scanner.nextBigDecimal();
+        scanner.nextLine();
+
+        bankTransactionService.withdraw(accountNumber, amount);
     }
 }

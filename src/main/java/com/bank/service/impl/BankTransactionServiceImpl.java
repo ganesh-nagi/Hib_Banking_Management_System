@@ -25,45 +25,60 @@ public class BankTransactionServiceImpl implements BankTransactionService {
     @Override
     public void deposit(int accountNumber, BigDecimal amount) {
 
-        if(accountNumber <= 0 ) {
-            System.out.println("Invalid account number");
+        if(accountNumber<=0){
+            System.out.println("Invalid Account Number");
             return;
         }
-        if(amount == null  || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            System.out.println("Deposit amount must be greater than zero");
+        if(amount==null || amount.compareTo(BigDecimal.ZERO)<=0){
+            System.out.println("Deposit must be greater than zero");
             return;
         }
-        Account account = accountRepository.findAccountByNumber(accountNumber);
+        bankTransactionRepository.processAccountTransaction(
+                accountNumber
+                , amount
+                , TransactionType.DEPOSIT
+        );
 
-        if(account == null) {
-            System.out.println("Account not found");
-            return;
-        }
 
-        BigDecimal updateBalance = account.getBalance().add(amount);
-        account.setBalance(updateBalance);
-
-        boolean accountUpdated = accountRepository.updateAccount(account);
-        if(!accountUpdated) {
-            System.out.println("Deposit Failed while updating Account balance");
-            return;
-        }
-
-        BankTransaction bankTransaction = new BankTransaction(
-                TransactionType.DEPOSIT ,
-                amount ,
-                LocalDateTime.now() ,
-                account
-                );
-
-        boolean transacionSaved = bankTransactionRepository.saveTransaction(bankTransaction);
-        if(transacionSaved) {
-            System.out.println("Deposited Successfully");
-            System.out.println("Updated Balance : " + updateBalance);
-        }
-        else {
-            System.out.println("Deposited amount updated , but transaction history failed .");
-        }
+//        if(accountNumber <= 0 ) {
+//            System.out.println("Invalid account number");
+//            return;
+//        }
+//        if(amount == null  || amount.compareTo(BigDecimal.ZERO) <= 0) {
+//            System.out.println("Deposit amount must be greater than zero");
+//            return;
+//        }
+//        Account account = accountRepository.findAccountByNumber(accountNumber);
+//
+//        if(account == null) {
+//            System.out.println("Account not found");
+//            return;
+//        }
+//
+//        BigDecimal updateBalance = account.getBalance().add(amount);
+//        account.setBalance(updateBalance);
+//
+//        boolean accountUpdated = accountRepository.updateAccount(account);
+//        if(!accountUpdated) {
+//            System.out.println("Deposit Failed while updating Account balance");
+//            return;
+//        }
+//
+//        BankTransaction bankTransaction = new BankTransaction(
+//                TransactionType.DEPOSIT ,
+//                amount ,
+//                LocalDateTime.now() ,
+//                account
+//                );
+//
+//        boolean transacionSaved = bankTransactionRepository.saveTransaction(bankTransaction);
+//        if(transacionSaved) {
+//            System.out.println("Deposited Successfully");
+//            System.out.println("Updated Balance : " + updateBalance);
+//        }
+//        else {
+//            System.out.println("Deposited amount updated , but transaction history failed .");
+//        }
     }
 
     @Override
@@ -78,5 +93,69 @@ public class BankTransactionServiceImpl implements BankTransactionService {
             return new ArrayList<>();
         }
         return bankTransactionRepository.findTransactionByAccountNumber(accountNumber);
+    }
+
+    @Override
+    public void withdraw(int accountNumber, BigDecimal amount) {
+
+            if (accountNumber <= 0) {
+                System.out.println("Invalid account number.");
+                return;
+            }
+
+            if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+                System.out.println("Withdraw amount must be greater than zero.");
+                return;
+            }
+
+            bankTransactionRepository.processAccountTransaction(
+                    accountNumber,
+                    amount,
+                    TransactionType.WITHDRAW
+            );
+
+
+//        if(accountNumber <= 0) {
+//            System.out.println("Invalid account number");
+//            return;
+//        }
+//        if(amount == null  || amount.compareTo(BigDecimal.ZERO) <= 0) {
+//            System.out.println("Deposit amount must be greater than zero");
+//            return;
+//        }
+//        Account account = accountRepository.findAccountByNumber(accountNumber);
+//        if(account == null) {
+//            System.out.println("Account not found");
+//            return;
+//        }
+//        if(account.getBalance().compareTo(amount) <= 0) {
+//            System.out.println("Insufficient Balance");
+//            System.out.println("Available balance : " + account.getBalance());
+//            return;
+//        }
+//
+//        BigDecimal updateBalance = account.getBalance().subtract(amount);
+//        account.setBalance(updateBalance);
+//        boolean accountUpdated = accountRepository.updateAccount(account);
+//        if(!accountUpdated) {
+//            System.out.println("withdraw Failed while updating Account balance");
+//            return;
+//        }
+//        BankTransaction bankTransaction = new BankTransaction(
+//                TransactionType.WITHDRAW ,
+//                amount ,
+//                LocalDateTime.now() ,
+//                account
+//        );
+//        boolean transacionSaved = bankTransactionRepository.saveTransaction(bankTransaction);
+//        if(transacionSaved) {
+//            System.out.println("withdraw Successfully");
+//            System.out.println("Updated Balance : " + updateBalance);
+//        }
+//        else {
+//            System.out.println("withdraw amount updated , but transaction history failed .");
+//        }
+
+
     }
 }

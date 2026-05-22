@@ -12,4 +12,6 @@ public interface BankTransactionService {
     List<BankTransaction> getAllTransactions();
 
     List<BankTransaction> getAllTransactionsByAccountNumber(int accountNumber);
+
+    void withdraw(int accountNumber, BigDecimal amount);
 }

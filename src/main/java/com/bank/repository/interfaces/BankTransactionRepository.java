@@ -2,7 +2,9 @@ package com.bank.repository.interfaces;
 
 import com.bank.entity.Account;
 import com.bank.entity.BankTransaction;
+import com.bank.entity.TransactionType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BankTransactionRepository {
@@ -12,4 +14,6 @@ public interface BankTransactionRepository {
     List<BankTransaction> findAllTransactions();
 
     List<BankTransaction> findTransactionByAccountNumber(int accountNumber);
+
+    boolean processAccountTransaction(int accountNumber , BigDecimal amount , TransactionType transactionType);
 }
